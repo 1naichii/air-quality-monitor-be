@@ -8,6 +8,9 @@ const routes = require('./routes/routes');
 const { initializeWebSocket } = require('./services/websocketServices');
 
 const app = express();
+
+// For Vercel deployment, port is handled automatically
+// For local development, use environment port or default
 const PORT = process.env.PORT || 3000;
 
 // Get CORS origins from environment variable, fallback to default
@@ -57,6 +60,12 @@ const server = http.createServer(app);
 
 initializeWebSocket(server);
 
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  server.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+// Export for Vercel serverless deployment
+module.exports = app;
