@@ -1,5 +1,4 @@
 const prisma = require('../lib/prisma');
-const { broadcast } = require('../services/websocketServices');
 
 async function getAllSensorData(req, res) {
   try {
@@ -36,8 +35,7 @@ async function createSensorData(req, res) {
   if (aqi < 0 || aqi > 500) {
     return res.status(400).json({ error: 'Invalid AQI value. Must be between 0-500.' });
   }
-  
-  try {
+    try {
     const newData = await prisma.sensor_data.create({ 
       data: { 
         air_quality_raw,
@@ -46,7 +44,6 @@ async function createSensorData(req, res) {
     });
     
     console.log('Data saved:', newData);
-    broadcast({ type: 'newData', payload: newData });
     res.status(201).json(newData);
   } catch (error) {
     console.error('Database error:', error);
@@ -54,4 +51,30 @@ async function createSensorData(req, res) {
   }
 }
 
-module.exports = { getAllSensorData, createSensorData };
+async function getLatestSensorData(req, res) {
+  const { since } = req.query;
+  
+  try {
+    let whereClause = {};
+    
+    // Jika ada parameter 'since', ambil data yang lebih baru dari timestamp tersebut
+    if (since) {
+      whereClause.reading_time = {
+        gt: new Date(since)
+      };
+    }
+    
+    const latestData = await prisma.sensor_data.findMany({
+      where: whereClause,
+      orderBy: { reading_time: 'desc' },
+      take: since ? undefined : 1 // Jika tidak ada 'since', ambil hanya 1 data terbaru
+    });
+    
+    res.status(200).json(latestData);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+module.exports = { getAllSensorData, getLatestSensorData, createSensorData };

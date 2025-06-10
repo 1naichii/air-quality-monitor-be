@@ -1,11 +1,10 @@
 # Air Quality Monitor Backend
 
-Backend API untuk sistem monitoring kualitas udara menggunakan sensor MQ135 dengan real-time data melalui WebSocket.
+Backend API untuk sistem monitoring kualitas udara menggunakan sensor MQ135.
 
 ## Features
 
-- 📊 Real-time air quality monitoring
-- 🔌 WebSocket support untuk live data
+- 📊 Air quality monitoring
 - 🔐 API Key authentication
 - 📈 AQI (Air Quality Index) calculation
 - 🗄️ MySQL database dengan Prisma ORM
@@ -17,7 +16,6 @@ Backend API untuk sistem monitoring kualitas udara menggunakan sensor MQ135 deng
 - **Framework:** Express.js
 - **Database:** MySQL
 - **ORM:** Prisma
-- **WebSocket:** ws
 - **Authentication:** API Key based
 
 ## API Endpoints
@@ -66,25 +64,6 @@ Content-Type: application/json
   "air_quality_raw": 150,
   "reading_time": "2025-06-10T08:30:00.000Z",
   "aqi": 65
-}
-```
-
-## WebSocket
-
-WebSocket server berjalan di port yang sama dengan HTTP server. Setiap data baru yang masuk akan di-broadcast ke semua connected clients.
-
-**WebSocket URL:** `ws://localhost:3000` (atau URL deployment Anda)
-
-**Message Format:**
-```json
-{
-  "type": "newData",
-  "payload": {
-    "id": 1,
-    "air_quality_raw": 150,
-    "reading_time": "2025-06-10T08:30:00.000Z",
-    "aqi": 65
-  }
 }
 ```
 

@@ -1,11 +1,9 @@
-// file: server.js
+// file: server.js - restart trigger
 const express = require('express');
-const http = require('http');
 const cors = require('cors');
 require('dotenv').config();
 
 const routes = require('./routes/routes');
-const { initializeWebSocket } = require('./services/websocketServices');
 
 const app = express();
 
@@ -56,13 +54,9 @@ app.get('/', (req, res) => {
   res.send('IoT Backend API v2 (Structured) is running!');
 });
 
-const server = http.createServer(app);
-
-initializeWebSocket(server);
-
 // For local development
 if (process.env.NODE_ENV !== 'production') {
-  server.listen(PORT, () => {
+  app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
 }
