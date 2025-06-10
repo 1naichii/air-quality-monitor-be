@@ -96,6 +96,7 @@ Buat file `.env` dengan konfigurasi berikut:
 PORT=3000
 DATABASE_URL="mysql://username:password@host:port/database_name"
 API_KEY="your-secret-api-key-here"
+CORS_ORIGINS="http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176"
 ```
 
 ## Installation & Development
@@ -157,11 +158,18 @@ CREATE TABLE sensor_data (
 
 ## CORS Configuration
 
-CORS dikonfigurasi untuk mendukung frontend di:
+CORS dikonfigurasi melalui environment variable `CORS_ORIGINS`. 
+
+Default origins yang didukung:
 - http://localhost:5173
-- http://localhost:5174
+- http://localhost:5174  
 - http://localhost:5175
 - http://localhost:5176
+
+Untuk menambah/mengubah origins, set `CORS_ORIGINS` dengan format:
+```env
+CORS_ORIGINS="https://yourfrontend.vercel.app,http://localhost:3000,https://yourdomain.com"
+```
 
 ## Author
 
